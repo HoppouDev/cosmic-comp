@@ -112,7 +112,6 @@ impl X11State {
         );
         output.user_data().insert_if_missing(|| {
             RefCell::new(OutputConfig {
-                // mode: ((size.w as i32, size.h as i32), None),
                 mode: cosmic_comp_config::Mode {
                     size: cosmic_comp_config::ScreenSize {
                         width: size.w as i32,
