@@ -234,3 +234,16 @@ pub enum XwaylandDescaling {
     #[default]
     Fractional,
 }
+
+#[derive(Debug, Copy, Clone, Default, Serialize, Deserialize, PartialEq)]
+pub struct ScreenSize {
+    pub width: i32,
+    pub height: i32,
+}
+
+#[derive(Debug, Copy, Clone, Default, Serialize, Deserialize, PartialEq)]
+pub struct Mode {
+    pub size: ScreenSize,
+    pub min_refresh_rate: Option<u32>,
+    pub max_refresh_rate: Option<u32>,
+}
