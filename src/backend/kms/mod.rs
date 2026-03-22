@@ -862,7 +862,9 @@ impl KmsGuard<'_> {
                     // and then select the closest refresh rate (e.g. to match 59.98 as 60)
                     .min_by_key(|mode| {
                         let refresh_rate = drm_helpers::calculate_refresh_rate(**mode);
-                        (output_config.0.mode.1.unwrap() as i32 - refresh_rate as i32).abs()
+                        (output_config.0.mode.max_refresh_rate.unwrap() as i32
+                            - refresh_rate as i32)
+                            .abs()
                     })
                     .ok_or(anyhow::anyhow!("Unable to find matching mode"))?;
 

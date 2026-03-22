@@ -111,11 +111,24 @@ impl State {
                 {
                     match mode {
                         Some(ModeConfiguration::Mode(mode)) => {
-                            current_config.mode =
-                                ((mode.size.w, mode.size.h), Some(mode.refresh as u32));
+                            current_config.mode = cosmic_comp_config::Mode {
+                                size: cosmic_comp_config::ScreenSize {
+                                    width: mode.size.w,
+                                    height: mode.size.h,
+                                },
+                                min_refresh_rate: None,
+                                max_refresh_rate: Some(mode.refresh as u32),
+                            }
                         }
                         Some(ModeConfiguration::Custom { size, refresh }) => {
-                            current_config.mode = ((size.w, size.h), refresh.map(|x| x as u32));
+                            current_config.mode = cosmic_comp_config::Mode {
+                                size: cosmic_comp_config::ScreenSize {
+                                    width: size.w,
+                                    height: size.h,
+                                },
+                                min_refresh_rate: None,
+                                max_refresh_rate: refresh.map(|x| x as u32),
+                            }
                         }
                         _ => {}
                     }

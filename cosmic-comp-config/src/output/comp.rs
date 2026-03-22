@@ -4,6 +4,8 @@ use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, fs::OpenOptions, path::Path};
 use tracing::{error, warn};
 
+use crate::Mode;
+
 #[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum OutputState {
@@ -39,7 +41,7 @@ pub struct OutputsConfig {
 
 #[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
 pub struct OutputConfig {
-    pub mode: ((i32, i32), Option<u32>),
+    pub mode: Mode,
     #[serde(default = "default_sync")]
     pub vrr: AdaptiveSync,
     pub scale: f64,
@@ -56,7 +58,7 @@ pub struct OutputConfig {
 impl Default for OutputConfig {
     fn default() -> OutputConfig {
         OutputConfig {
-            mode: ((0, 0), None),
+            mode: Default::default(),
             vrr: AdaptiveSync::Enabled,
             scale: 1.0,
             transform: TransformDef::Normal,

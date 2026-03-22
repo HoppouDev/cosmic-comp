@@ -112,7 +112,14 @@ impl X11State {
         );
         output.user_data().insert_if_missing(|| {
             RefCell::new(OutputConfig {
-                mode: ((size.w as i32, size.h as i32), None),
+                // mode: ((size.w as i32, size.h as i32), None),
+                mode: cosmic_comp_config::Mode {
+                    size: cosmic_comp_config::ScreenSize {
+                        width: size.w as i32,
+                        height: size.h as i32,
+                    },
+                    ..Default::default()
+                },
                 ..Default::default()
             })
         });
@@ -181,9 +188,16 @@ impl X11State {
             .borrow_mut();
 
         // reset size
-        if config.mode.0 != (size.w as i32, size.h as i32) {
+        if config.mode.size.width != size.w as i32 && config.mode.size.height != size.h as i32 {
             if !test_only {
-                config.mode = ((size.w as i32, size.h as i32), None);
+                // config.mode = ((size.w as i32, size.h as i32), None);
+                config.mode = cosmic_comp_config::Mode {
+                    size: cosmic_comp_config::ScreenSize {
+                        width: size.w as i32,
+                        height: size.h as i32,
+                    },
+                    ..Default::default()
+                };
             }
             Err(anyhow::anyhow!("Cannot set window size"))
         } else {
@@ -439,7 +453,10 @@ pub fn init_backend(
                             .get::<RefCell<OutputConfig>>()
                             .unwrap()
                             .borrow_mut();
-                        config.mode.0 = size.into();
+                        config.mode.size = cosmic_comp_config::ScreenSize {
+                            width: size.w,
+                            height: size.h,
+                        };
                     }
 
                     output.delete_mode(output.current_mode().unwrap());

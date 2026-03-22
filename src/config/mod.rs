@@ -88,11 +88,11 @@ pub struct CompOutputConfig<'a>(pub Ref<'a, OutputConfig>);
 
 impl CompOutputConfig<'_> {
     pub fn mode_size(&self) -> Size<i32, Physical> {
-        self.0.mode.0.into()
+        (self.0.mode.size.width, self.0.mode.size.height).into()
     }
 
     pub fn mode_refresh(&self) -> u32 {
-        self.0.mode.1.unwrap_or(60_000)
+        self.0.mode.max_refresh_rate.unwrap_or(60_000)
     }
 
     pub fn transformed_size(&self) -> Size<i32, Physical> {

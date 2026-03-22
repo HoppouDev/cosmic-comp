@@ -1048,7 +1048,15 @@ fn populate_modes(
             .unwrap()
             .borrow_mut();
         *output_config = OutputConfig {
-            mode: ((output_mode.size.w, output_mode.size.h), Some(refresh_rate)),
+            // mode: ((output_mode.size.w, output_mode.size.h), Some(refresh_rate)),
+            mode: cosmic_comp_config::Mode {
+                size: cosmic_comp_config::ScreenSize {
+                    width: output_mode.size.w,
+                    height: output_mode.size.h,
+                },
+                min_refresh_rate: None,
+                max_refresh_rate: Some(refresh_rate),
+            },
             position,
             max_bpc,
             scale,

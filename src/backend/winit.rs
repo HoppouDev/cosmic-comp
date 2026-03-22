@@ -116,9 +116,15 @@ impl WinitState {
             .get::<RefCell<OutputConfig>>()
             .unwrap()
             .borrow_mut();
-        if config.mode.0 != (size.w, size.h) {
+        if config.mode.size.width != size.w && config.mode.size.height != size.h {
             if !test_only {
-                config.mode = ((size.w, size.h), None);
+                config.mode = cosmic_comp_config::Mode {
+                    size: cosmic_comp_config::ScreenSize {
+                        width: size.w,
+                        height: size.h,
+                    },
+                    ..Default::default()
+                }
             }
             Err(anyhow::anyhow!("Cannot set window size"))
         } else {
@@ -167,7 +173,13 @@ pub fn init_backend(
     );
     output.user_data().insert_if_missing(|| {
         RefCell::new(OutputConfig {
-            mode: ((size.w, size.h), None),
+            mode: cosmic_comp_config::Mode {
+                size: cosmic_comp_config::ScreenSize {
+                    width: size.w,
+                    height: size.h,
+                },
+                ..Default::default()
+            },
             transform: TransformDef::Flipped180,
             ..Default::default()
         })
@@ -329,7 +341,10 @@ impl State {
                         .get::<RefCell<OutputConfig>>()
                         .unwrap()
                         .borrow_mut();
-                    config.mode.0 = size.into();
+                    config.mode.size = cosmic_comp_config::ScreenSize {
+                        width: size.w,
+                        height: size.h,
+                    };
                 }
                 output.delete_mode(output.current_mode().unwrap());
                 output.set_preferred(mode);
